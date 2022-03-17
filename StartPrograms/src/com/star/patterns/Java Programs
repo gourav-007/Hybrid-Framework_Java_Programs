@@ -1,0 +1,30 @@
+pacakge JavaProgram
+import java.util.Arrays;
+import java.util.Scanner;
+
+
+public class RotateRightArray{
+
+public static String rotate(int []arr,int order){
+      if(arr == null || order < 0) {
+      throw new IllegalArgumentException("illegal Argument");
+      for(int i=0;i<order;i++)
+      {
+        for(int j=arr.length-1;j>0;j--)
+        {
+           int temp = arr[j];
+           arr[j]=arr[j-1];
+           arr[j-1]=temp;
+        }
+     }
+     
+     return Arrays.toString(arr);
+}
+public static void main(String[]args)
+{
+    Scanner sc = new Scanenr(System.in);
+    k = sc.nextInt();
+    System.out.println(rotate(new int[] {1,2,3,4,5,6,7},k));
+}
+
+}
