@@ -1,0 +1,12 @@
+//GIven an Integer Count number of digits
+
+  public static void main(String[]args) {
+        Scanner sc = new Scanner(System.in);
+        int input = sc.nextInt();
+       int digits =0;
+       while (input!=0) {
+           input = input/10;
+           digits++;
+        }
+       System.out.println(digits);
+    }
