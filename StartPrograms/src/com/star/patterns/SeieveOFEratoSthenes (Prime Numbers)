@@ -1,24 +1,29 @@
-private static int SeieveOFEratoSthenes(int n){
-        
+
+public class prime {
+    private static boolean[] SeieveOFEratoSthenes(int[] n){
+
         boolean isPrime[] = new boolean[n+1];
-        Arrays.fill(n,true);
+        Arrays.fill(isPrime,true);
         isPrime[0] = false;
         isPrime[1] = false;
-        
         for(int i=2;i*i<=n;i++){
             for(int j=2*i;j<=n;j+=i){
                 isPrime[j] = false;
             }
         }
-        
+
         return isPrime;
-        
+
     }
 
-    
-	public static void main (String[] args) {
-	//SeieveOFEratoSthenes
-	int arr[] = {1,2,3,4,5,6,7,8,9,10,11,12};
-	System.out.println(SeieveOFEratoSthenes(arr));
-	}
+
+    public static void main (String[] args) {
+        //SeieveOFEratoSthenes
+        boolean IsPrime = SeieveOFEratoSthenes(20);
+        for(int i=0;i<=20;i++) {
+            System.out.println(i+"  "+IsPrime[i]);
+        }
+    }
+}
+
 }
