@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.Arrays;
 
-class GFG {
+class CountNumberOFPaths {
 
     private static int countNumberOfWays(int n,int m){
             
