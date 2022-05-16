@@ -1,0 +1,20 @@
+public class InverseNumber {
+    public static void main(String[]args) {
+
+        int n = 21453;
+        int inverse = 0;
+        int orgPlace = 1;
+
+        while(n!=0){
+            int orgDigit = n%10;
+            int invertDigit = orgPlace;
+            int invertPlace  = orgDigit;
+
+            inverse = inverse + invertDigit*(int)Math.pow(10,invertPlace-1);
+            n = n/10;
+            orgPlace++;
+        }
+
+        System.out.println(inverse);
+    }
+}
