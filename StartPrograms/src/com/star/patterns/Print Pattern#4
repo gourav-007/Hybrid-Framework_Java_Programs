@@ -1,0 +1,20 @@
+//Mirror of Left Angle Triangle
+
+    public static void main(String[]args) {
+        
+    int n=5;
+    
+    for(int i=0;i<=n;i++){
+        int star = n-i;
+        int space = i;
+    for(int j=0;j<=space;j++){
+        System.out.print("\t");
+    }
+    for(int j=0;j<=star;j++){
+        System.out.print("*\t");
+    }
+ 
+    System.out.println();
+    }
+    
+    }
