@@ -1,0 +1,13 @@
+//Print Multipication Table.
+
+public static void main(String[]args)
+{
+  int n=5;
+  for(int i=1;i<=n;i++)
+  {
+    int val = n*i;
+    System.out.print(n+"*"+i+"="+val);
+    System.out.println();
+  }
+}  
+  
