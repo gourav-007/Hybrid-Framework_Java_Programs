@@ -1,0 +1,24 @@
+//Decimal to any base 
+
+    public static int getbaseConv(int number,int changeBase){
+        int rev = 0;
+        int p=1;
+        while(number>0){
+            int dig = number%changeBase;
+            number=number/changeBase;
+            rev += dig*p;
+            p=p*10;
+        }
+
+        return rev;
+
+    }
+
+    public static void main(String[]args)
+    {
+
+        int number = 1287;
+        int changeBase = 2;
+        int re = getbaseConv(number,changeBase);
+        System.out.println(re);
+    }
