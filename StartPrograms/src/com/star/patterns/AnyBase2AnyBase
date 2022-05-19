@@ -1,0 +1,40 @@
+
+    public static int getValue(int number, int base1, int base2) {
+        int db = anyBaseToDecimal(number,base1);
+        int dn = anyDecimalToAnyBase(db,base2);
+        return dn;
+    }
+
+    private static int anyDecimalToAnyBase(int db, int base2) {
+        int rem=0;
+        int p=1;
+        while (db>0) {
+
+            int dig = db%base2;
+            db=db/base2;
+            rem+=dig*p;
+            p=p*10;
+        }
+        return rem;
+    }
+
+    private static int anyBaseToDecimal(int number, int base1) {
+        int rev=0;
+        int p=1;
+        while (number>0) {
+            int dig  = number%10;
+            number = number/10;
+            rev += dig*p;
+            p=p*base1;
+        }
+        return rev;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int number = sc.nextInt();
+        int base1 = sc.nextInt();
+        int base2 = sc.nextInt();
+        System.out.println(getValue(number, base1, base2));
+    }
