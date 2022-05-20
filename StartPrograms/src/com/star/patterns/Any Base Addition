@@ -1,0 +1,39 @@
+
+    private static int getValue(int number1,int number2,int base){
+
+        /*
+                base -8
+                236
+                754
+                -------
+                1212
+         */
+
+        int rem = 0;
+        int carry = 0;
+        int p=1;
+        while (number1>0 || number2>0 || carry>0){
+
+            int dig1  = number1%10;
+            int dig2 = number2%10;
+            number1 = number1/10;
+            number2 = number2/10;
+            int dig = dig1+dig2+carry;
+            carry=dig/base;
+            dig = dig%base;
+
+            rem +=dig*p;
+            p=p*10;
+        }
+
+        return rem;
+    }
+    
+        public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int number1 = sc.nextInt();
+        int number2 = sc.nextInt();
+        int base = sc.nextInt();
+        System.out.println(getValue(number1, number2, base));
+    }
