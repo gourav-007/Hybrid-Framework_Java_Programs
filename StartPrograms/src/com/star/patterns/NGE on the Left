@@ -1,0 +1,30 @@
+
+        public static void main(String[] args) {
+            int [] arr = {13,7,6,12};
+            int nge [] = new int[arr.length];
+            
+            Stack<Integer> stack = new Stack<>();
+            stack.push(arr[0]);
+            nge[0] = -1;
+            
+            for(int i=1;i<arr.length;i++){
+                
+                while(!stack.isEmpty() && arr[i]>=stack.peek()){
+                    stack.pop();
+                }
+                
+                if(stack.isEmpty()){
+                    nge[i] = -1;
+                }
+                
+                else
+                {
+                    nge[i] = stack.peek();
+                }
+                
+                stack.push(arr[i]);
+            }
+        
+        System.out.println(Arrays.toString(nge));
+          
+    }
