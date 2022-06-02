@@ -1,0 +1,42 @@
+
+    public static void main(String[] args) {
+
+//Pattern containing only I’s and D’s. I for increasing and D for decreasing.
+// Device an algorithm to print the minimum number following that pattern.
+// Digits from 1-9 and digits can’t repeat.
+
+        String input = "DIDI";
+        int num =1;
+        Stack<Integer> stack = new Stack<>();
+        for(int i=0;i<input.length();i++){
+            char ch = input.charAt(i);
+            if(ch=='D'){
+                stack.push(num);
+                num++;
+            }else {
+                stack.push(num);
+                num++;
+                while (!stack.isEmpty()) {
+                    System.out.print(stack.pop());
+                }
+            }
+        }
+    stack.push(num); //if input is "D" or "I" then this will safeguard.
+        while (!stack.isEmpty()){
+            System.out.print(stack.pop());
+        }
+    }
+
+//output : 21435
+
+
+/*
+Few more TC's
+   Input: D        Output: 21
+   Input: I        Output: 12
+   Input: DD       Output: 321
+   Input: II       Output: 123
+   Input: DIDI     Output: 21435
+   Input: IIDDD    Output: 126543
+   Input: DDIDDIID Output: 321654798
+ */
