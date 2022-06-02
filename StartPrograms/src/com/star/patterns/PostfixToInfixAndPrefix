@@ -1,0 +1,46 @@
+public static void main(String[] args) {
+
+        String postfixExpression = "ab*c+";
+        Stack<Integer> val = new Stack<>();
+        Stack<String> infix = new Stack<>();
+        Stack<String> prefix = new Stack<>();
+
+        for(int i=0;i<postfixExpression.length();i++){
+            char ch = postfixExpression.charAt(i);
+            if(ch=='+' || ch=='-' || ch=='*' || ch=='/'){
+                int v2 = val.pop();
+                int v1 = val.pop();
+                int valo = operation(v1,v2,ch);
+                val.push(valo);
+
+                String inv2 = infix.pop();
+                String inv1 = infix.pop();
+                String inv = "("+inv1+ch+inv2+")";
+                infix.push(inv);
+
+                String prev2= prefix.pop();
+                String prev1=prefix.pop();
+                String prev = ch+prev1+prev2;
+                prefix.push(prev);
+            }
+            else{
+                val.push(ch-'0');
+                infix.push(ch+"");
+                prefix.push(ch+"");
+            }
+        }
+
+        System.out.println("infix : "+infix.pop());
+        System.out.println("prefix : "+prefix.pop());
+    }
+    public static int operation(int v1,int v2, char ch){
+        if(ch=='+'){
+            return v1+v2;
+        } else if (ch=='-') {
+            return v1-v2;
+        } else if (ch=='*') {
+            return v1*v2;
+        } else {
+            return v1/v2;
+        }
+    }
