@@ -1,0 +1,57 @@
+    public static void main(String[] args) {
+
+        //Prefix to Infix and PostFix.
+        String prefixExpression = "-+2/*6483";
+        Stack<Integer> val = new Stack<>();
+        Stack<String> infix = new Stack<>();
+        Stack<String> postfix = new Stack<>();
+
+        for(int i=prefixExpression.length()-1;i>=0;i--){
+
+            char ch = prefixExpression.charAt(i);
+            if(ch=='+' || ch=='-' || ch=='*' || ch=='/'){
+                int v1 = val.pop();
+                int v2 = val.pop();
+                int valo = operation(v1,v2,ch);
+                val.push(valo);
+
+                String inv1 = infix.pop();
+                String inv2 = infix.pop();
+                String inv = "("+inv1+ch+inv2+")";
+                infix.push(inv);
+
+                String pv1 = postfix.pop();
+                String pv2 = postfix.pop();
+                String pv = pv1+pv2+ch;
+                postfix.push(pv);
+            }
+
+            else{
+                val.push(ch-'0'); //converted char to int.
+                infix.push(ch+""); //converted char to String.
+                postfix.push(ch+"");
+            }
+        }
+
+        System.out.println("Value : "+val.pop());
+        System.out.println("Infix :"+infix.pop());
+        System.out.println("Postfix :"+postfix.pop());
+    }
+
+    public static int operation(int v1,int v2, char ch){
+
+        if(ch=='+'){
+            return v1+v2;
+        } else if (ch=='-') {
+            return v1-v2;
+        } else if (ch=='*') {
+            return v1*v2;
+        } else {
+            return v1/v2;
+        }
+    }
+    
+//Output :   
+//Value : 2
+//Infix :((2+((6*4)/8))-3)
+//Postfix :264*8/+3-
