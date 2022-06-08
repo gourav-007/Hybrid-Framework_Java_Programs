@@ -317,6 +317,33 @@ public void kReverse(int k){
         System.out.print(head.val+" -> ");
     }
 
+
+//Reverse a Linked List using Pointers (Recursive)
+
+    public void reversePRHelper(Node head){
+        if(head==null){
+            return;
+        }
+        reversePRHelper(head.next);
+        if(head==tail){
+            //nothing to do
+        } else {
+            head.next.next = head;
+        }
+        System.out.print(head.val+" -> ");
+    }
+
+    public void reversePR(){
+        reversePRHelper(head);
+        System.out.println("HEAD");
+        head.next=null;
+        Node temp = head;
+        head = tail;
+        tail = head;
+    }
+
+
+
     private class Node{
         private int val;
         private Node next;
