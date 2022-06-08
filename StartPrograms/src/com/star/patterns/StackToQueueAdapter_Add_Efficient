@@ -1,7 +1,7 @@
 public class StackToQueueAdapter {
 //Stack behaves like a Queue.
     static class Queue {
-        //Remove Efficient
+        //Add Efficient
         Stack<Integer> mainStack = new Stack<>();
         Stack<Integer> mainHelperStack = new Stack<>();
         int size;
