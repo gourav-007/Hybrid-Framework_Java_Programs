@@ -302,6 +302,20 @@ public void kReverse(int k){
         this.tail=prev.tail;
         this.size= prev.size;
     }
+    
+//Display Reverse Link List (Recursive)
+    public void displayReverse(){
+        displayReverseHelper(head);
+        System.out.println("HEAD");
+    }
+
+    private void displayReverseHelper(Node head) {
+        if(head==null){
+            return;
+        }
+        displayReverseHelper(head.next);
+        System.out.print(head.val+" -> ");
+    }
 
     private class Node{
         private int val;
