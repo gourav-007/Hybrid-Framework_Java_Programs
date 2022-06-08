@@ -341,7 +341,28 @@ public void kReverse(int k){
         head = tail;
         tail = head;
     }
+    
+    
+//Reverse LinkList by Data Recursive
+    
+    Node rleft;
+    public void reverseDR(){
+        rleft=head;
+        reverseDRhelper(head,0);
+    }
 
+    private void reverseDRhelper(Node head,int floor) {
+        if(head==null){
+            return;
+        }
+        reverseDRhelper(head.next,floor+1);
+        if(floor>size/2) {
+            int temp = head.val;
+            head.val = rleft.val;
+            rleft.val = temp;
+            rleft = rleft.next;
+        }
+    }
 
 
     private class Node{
