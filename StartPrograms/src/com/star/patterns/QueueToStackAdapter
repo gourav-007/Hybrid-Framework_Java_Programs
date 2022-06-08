@@ -1,0 +1,56 @@
+
+public class QueueToStackAdapter {
+
+    static class Stack{
+
+        Queue<Integer> mainQ = new ArrayDeque<>();
+        Queue<Integer> helperQ = new ArrayDeque<>();
+        static int size;
+
+       void push(int val){
+            while (mainQ.size()>0){
+                helperQ.add(mainQ.remove());
+            }
+            mainQ.add(val);
+            while (helperQ.size()>0) {
+                mainQ.add(helperQ.remove());
+            }
+        }
+
+        int pop(){
+            if(mainQ.size()==0){
+                System.out.println("Stack Underflow");
+                return -1;
+            }
+            else {
+                return mainQ.remove();
+            }
+        }
+
+        int top(){
+            if(mainQ.size()==0){
+                System.out.println("Stack Underflow");
+                return -1;
+            }
+            else {
+                return mainQ.peek();
+            }
+        }
+
+        void size(){
+            System.out.println(mainQ.size());
+        }
+    }
+
+    public static void main(String[] args) {
+        QueueToStackAdapter.Stack stack = new Stack();
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+        stack.push(40);
+        stack.push(50);
+        stack.push(60);
+        stack.size();
+        System.out.println(stack.top());
+    }
+}
