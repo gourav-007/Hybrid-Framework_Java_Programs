@@ -1,0 +1,67 @@
+public class StackToQueueAdapter {
+//Stack behaves like a Queue.
+    static class Queue {
+        //Remove Efficient
+        Stack<Integer> mainStack = new Stack<>();
+        Stack<Integer> mainHelperStack = new Stack<>();
+        int size;
+
+        void add(int val) {
+            mainStack.push(val);
+        }
+
+        int remove() {
+            if (mainStack.size() == 0) {
+                System.out.println("Queue Empty");
+                return -1;
+            } else {
+                while (mainStack.size() > 1) {
+                    mainHelperStack.push(mainStack.pop());
+                }
+                int temp = mainStack.pop();
+                while (mainHelperStack.size() > 0) {
+                    mainStack.push(mainHelperStack.pop());
+                }
+                return temp;
+            }
+        }
+
+        int top() {
+            if (mainStack.size() == 0) {
+                System.out.println("Queue Empty");
+                return -1;
+            } else {
+                while (mainStack.size() > 1) {
+                    mainHelperStack.push(mainStack.pop());
+                }
+                int temp = mainStack.pop();
+                mainHelperStack.push(temp);
+                while (mainHelperStack.size() > 0) {
+                    mainStack.push(mainHelperStack.pop());
+                }
+                return temp;
+            }
+        }
+
+        void size() {
+            System.out.println(mainStack.size());
+        }
+
+    }
+    public static void main(String[] args) {
+        Queue q = new Queue();
+        q.add(10);
+        q.add(20);
+        q.add(30);
+        q.add(40);
+        q.add(50);
+        //10 20 30 40 50
+        q.size();
+        System.out.println(q.top());
+        System.out.println(q.remove());
+        System.out.println(q.top());
+        q.size();
+    }
+
+    //Do same thing for Add efficient.
+}
