@@ -363,6 +363,49 @@ public void kReverse(int k){
             rleft = rleft.next;
         }
     }
+    
+     //IsLLPanildrome?
+    private boolean isLLpanildromehelper(Node right){
+        if(right==null){
+            return true;
+        }
+        boolean rres= isLLpanildromehelper(right.next);
+        if(!rres){
+            return false;
+        } else if (pleft.val!= right.val){
+            return false;
+        } else {
+            pleft=pleft.next;
+            return true;
+        }
+    }
+    Node pleft;
+    public boolean isLLPanildrome(){
+        pleft=head;
+        return isLLpanildromehelper(head);
+    }
+
+    //Fold a Link List
+    public void LLFolderHelper(Node right,int floor){
+        if(right==null){
+            return;
+        }
+        LLFolderHelper(right.next,floor+1);
+        if(floor>size/2) {
+            Node temp = fleft.next;
+            fleft.next = right;
+            right.next = temp;
+            fleft = temp;
+        } else if(floor==size/2) {
+            tail = right;
+            tail.next = null;
+        }
+    }
+    Node fleft;
+    public void LLfolder(){
+        fleft=head;
+        LLFolderHelper(head,0);
+    }
 
 
     private class Node{
