@@ -13,14 +13,37 @@ public class GenericTree {
 
         }
     }
-    
-        private static class  Pair{
+
+    private static class  Pair{
         public Pair(Node node, int level) {
             this.node = node;
             this.level = level;
         }
         Node node;
         int level;
+    }
+
+    private static Node getRoot(int [] arr) {
+        Node root = null;
+        Stack<Node> stack = new Stack<>();
+
+        for (int i = 0;i < arr.length;i++) {
+            if (arr[i] == -1) {
+                stack.pop();
+            }
+            else
+            {
+                Node n = new Node();
+                n.data = arr[i];
+                if (!stack.isEmpty()) {
+                    stack.peek().childern.add(n);
+                } else {
+                    root = n;
+                }
+                stack.push(n);
+            }
+        }
+        return root;
     }
 
     public static void display(Node node) {
@@ -118,10 +141,10 @@ public class GenericTree {
                 queue.addAll(node.childern);
             }
             else {
-               if(!queue.isEmpty()) {
-                   queue.add(new Node(-1));
+                if(!queue.isEmpty()) {
+                    queue.add(new Node(-1));
                     System.out.println();
-               }
+                }
             }
         }
         System.out.println();
@@ -143,8 +166,8 @@ public class GenericTree {
             System.out.println();
         }
     }
-    
-     public static void levlOrderLineWiseTraversal4(Node node){
+
+    public static void levlOrderLineWiseTraversal4(Node node){
         Queue<Pair> queue =  new ArrayDeque<>();
         queue.add(new Pair(node,1));
 
@@ -162,6 +185,8 @@ public class GenericTree {
                 queue.add(cp);
             }
         }
+
+        System.out.println();
     }
 
     public static void zigZagTraversal(Node node){
@@ -197,6 +222,188 @@ public class GenericTree {
         }
         System.out.println("ZigZag Traversal Ends Here !!");
     }
+
+    public static boolean areTreesSimilar(Node node1,Node node2){
+
+        if(node1.childern.size()!=node2.childern.size()){
+            return false;
+        }
+
+        for (int i=0;i<node1.childern.size();i++){
+            Node c1 = node1.childern.get(i);
+            Node c2 = node2.childern.get(i);
+
+            if(!areTreesSimilar(c1, c2)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean areTreeMirror(Node node1, Node node2){
+        if(node1.childern.size() != node2.childern.size()){
+            return false;
+        }
+        for (int i=0;i<node1.childern.size();i++){
+            int j = node1.childern.size()-1-i;
+
+            Node c1 = node1.childern.get(i);
+            Node c2 = node2.childern.get(j);
+
+            if(!areTreeMirror(c1, c2)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static Node predecessor;
+    static Node successor;
+    static int state;
+    public static void findPredecessorAndSuccessor(Node node, int element){
+        if(state==0) {
+            if (node.data == element) {
+                state = 1;
+            } else {
+                predecessor = node;
+            }
+
+        }
+        else if(state==1){
+            successor = node;
+            state=2;
+        }
+
+        for (Node child: node.childern){
+            findPredecessorAndSuccessor(child,element);
+        }
+    }
+
+    public static void removeLeaves(Node node){
+
+        for(int i=node.childern.size()-1;i>=0;i--){
+            Node child = node.childern.get(i);
+            if(child.childern.size()==0){
+                node.childern.remove(child);
+            }
+        }
+
+        for(Node child: node.childern){
+            removeLeaves(child);
+        }
+    }
+
+    public static void doLinearize(Node node){  //O(n^2)
+
+        for(Node child: node.childern){
+            doLinearize(child);
+        }
+
+        while (node.childern.size()>1){
+            //Here we last leaf from Tree
+            //pointing second last child to last child.
+            Node lastchild = node.childern.remove(node.childern.size()-1);
+            Node secondlastchild = node.childern.get(node.childern.size()-1);
+            Node secondlasttail = getTail(secondlastchild);
+            secondlasttail.childern.add(lastchild);
+        }
+
+    }
+
+    public static Node doLinearize2(Node node){ //O(n)
+        if(node.childern.size()==0){ //leaf cannot be linearize so returning Node.
+            return node;
+        }
+        Node lasttail = doLinearize2(node.childern.get(node.childern.size()-1)); // will linearize and return last tail (overall tail).
+        while (node.childern.size()>1){
+            Node last = node.childern.remove(node.childern.size()-1); //removing and storing last
+            Node secondlast = node.childern.get(node.childern.size()-1); //second last...asking tail.
+            Node secondlasttail  = doLinearize2(secondlast); //linearize and return second last tail.
+            secondlasttail.childern.add(last); //add last to second last tail.
+        }
+        return lasttail; //Overall Tail of tree.
+    }
+
+    public static boolean findElement(Node node,int element){
+        if(node.data==element){
+            return true;
+        }
+        for (Node child: node.childern) {
+            boolean findinchild = findElement(child, element);
+            if (findinchild){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static ArrayList<Integer> findNodeToRootPath(Node node, int element){
+
+        if(node.data==element){
+            ArrayList<Integer> list = new ArrayList<>();
+            list.add(node.data);
+            return list;
+        }
+
+        for (Node child: node.childern) {
+            ArrayList<Integer> pathtillchild = findNodeToRootPath(child,element);
+            if(pathtillchild.size()>0){
+                pathtillchild.add(node.data);
+                return pathtillchild;
+            }
+        }
+
+        return new ArrayList<>();
+    }
+
+    public static int lowestCommonAncestor(Node node,int e1,int e2){
+        /*
+        Here we are taking help from findNodeToRootPath method for getting path of two elements e1 and e2
+        after getting path we check in both arraylist and compare elements on both lists by reversing loops.
+        the node where both the two elements are differ, we come out of the loop and increment loop by 1 to get their common node.
+         */
+        ArrayList<Integer> p1 = findNodeToRootPath(node,e1);
+        ArrayList<Integer> p2 = findNodeToRootPath(node,e2);
+
+        int i = p1.size()-1;
+        int j = p2.size()-1;
+
+        while (i>=0 && j>=0 && p1.get(i)==p2.get(j)){
+            i--;
+            j--;
+        }
+        i++;
+        j++;
+
+        return p1.get(i);
+    }
+
+    public static int distanceBetweenNodes(Node node,int e1,int e2){
+
+        ArrayList<Integer> p1 = findNodeToRootPath(node,e1);
+        ArrayList<Integer> p2 = findNodeToRootPath(node,e2);
+
+        int i= p1.size()-1;
+        int j=p2.size()-1;
+
+        while (i>=0&&j>=0&&p1.get(i)==p2.get(j)){
+            i--;
+            j--;
+        }
+        i++;
+        j++;
+
+        return i+j;
+    }
+
+    private static Node getTail(Node node) {
+        while (node.childern.size()==1){
+            node = node.childern.get(0);
+        }
+        return node;
+    }
+
+
 
 // Can Create Seprate Main Class (We Should)
 
