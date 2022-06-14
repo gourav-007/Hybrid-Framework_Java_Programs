@@ -1,3 +1,9 @@
+package samplepkg;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.Stack;
 
 public class GenericTree {
 
@@ -396,6 +402,104 @@ public class GenericTree {
         return i+j;
     }
 
+    static int ceil;
+    static int floor;
+    public static void ceilAndFloor(Node node,int element){
+        if(node.data>element){
+            if(node.data<ceil){
+                ceil = node.data;
+            }
+        }
+
+        if(node.data<element){
+            if(node.data>floor){
+                floor=node.data;
+            }
+        }
+
+        for (Node child: node.childern){
+            ceilAndFloor(child,element);
+        }
+    }
+
+    public static int kthLargestElement(Node node, int k){
+        floor = Integer.MIN_VALUE;
+        int factor = Integer.MAX_VALUE;
+        for (int i=0;i<k;i++){
+            ceilAndFloor(node,factor);  //will set floor
+            factor = floor;
+            floor = Integer.MIN_VALUE;
+        }
+        return factor;
+    }
+
+    static int maximumsubnode=0;
+    static int maxsum=Integer.MIN_VALUE;
+    public static int returnSumAndCalculateMaxSumOfSubTree(Node node){
+        int sum =0;
+        for (Node child: node.childern){
+            int csum = returnSumAndCalculateMaxSumOfSubTree(child);
+            sum = sum + csum;
+        }
+        sum = sum + node.data; //root adding itself here (in sum of child).
+
+        if(sum>maxsum){
+            maximumsubnode = node.data;
+            maxsum = sum;
+        }
+        return sum;
+    }
+
+    static int dia=0; //Travel and change trick.
+    public static int calcDiaReturnHeight(Node node){
+        int deepestchildheight = -1;
+        int seconddeepestchildheight = -1;
+
+        for(Node child: node.childern){
+            int childheight  = calcDiaReturnHeight(child);
+            if(childheight>deepestchildheight){
+                seconddeepestchildheight = deepestchildheight;
+                deepestchildheight = childheight;
+
+            } else if (childheight>seconddeepestchildheight) {
+                seconddeepestchildheight = childheight;
+            }
+        }
+
+        if(deepestchildheight+seconddeepestchildheight+2>dia){
+            dia = deepestchildheight+seconddeepestchildheight+2;
+        }
+
+        deepestchildheight+=1; //our height is 1 more than deepestchildheight.
+        return deepestchildheight;
+    }
+
+    //Pre-Order and Post-Order through Iteration.
+    public static void IterativePreOrderAndPostOrder(Node node){
+        Stack<Pair> stack = new Stack<>();
+        stack.push(new Pair(node,-1));
+
+        String pre = "";
+        String post = "";
+
+        while (!stack.isEmpty()){
+            Pair top = stack.peek();
+            if(top.level==-1){
+                pre = pre + top.node.data+" ";
+                top.level++;
+            } else if (top.level==top.node.childern.size()) {
+                post = post + top.node.data + " ";
+                stack.pop();
+            } else {
+                Pair cp = new Pair(top.node.childern.get(top.level),-1);
+                stack.push(cp);
+                top.level++;
+            }
+        }
+        System.out.println("Pre Order  : "+pre);
+        System.out.println("Post Order : "+post);
+    }
+
     private static Node getTail(Node node) {
         while (node.childern.size()==1){
             node = node.childern.get(0);
@@ -403,32 +507,14 @@ public class GenericTree {
         return node;
     }
 
-
-
-// Can Create Seprate Main Class (We Should)
-
     public static void main(String[] args){
+        //in input -1 represents null bcoz in Queue we can't insert null directly so we inserted -1 as a marker.
         int [] arr = {10,20,50,-1,60,-1,-1,30,70,-1,80,110,-1,120,-1,-1,90,-1,-1,40,100,-1,-1,-1};
-        Node root = null;
-        Stack<Node> stack = new Stack<>();
 
-
-        for (int i = 0;i < arr.length;i++) {
-            if (arr[i] == -1) {
-                stack.pop();
-            }
-            else
-            {
-                Node n = new Node();
-                n.data = arr[i];
-                if (!stack.isEmpty()) {
-                    stack.peek().childern.add(n);
-                } else {
-                    root = n;
-                }
-                stack.push(n);
-            }
-        }
+//        int[] arr1 = {1,2,2,3,4,4,3}; // Symmetric Tree.
+//        int [] arr1 = {1,3,3,3,2};
+//        int[] arr2 = {1,2,4,-1,5,-1,-1,5,-1};
+        Node root = getRoot(arr);
 
         display(root);
         System.out.println("Size of Generic Tree : "+ size(root));
@@ -440,5 +526,53 @@ public class GenericTree {
         zigZagTraversal(root);
         levelOrderLineWiseTraversal2(root);
         levelOrderLineWiseTraversal3(root);
+        levlOrderLineWiseTraversal4(root);
+
+//        System.out.println("Two trees are "+areTreeMirror(root,root1)+" mirror in shape.");
+//        System.out.println("is Trees are Symmetric ? "+areTreeMirror(root,root));
+//        If tree is mirror image of itself then we can say tree is symmetric.
+//        removeLeaves(root);
+//        display(root);
+        System.out.println("Doing Linearization...");
+        doLinearize(root);
+        display(root);
+        System.out.println("Linearization Done..");
+        System.out.println("Doing Linearization2...");
+        doLinearize2(root);
+        display(root);
+        System.out.println("Linearization2 Done..");
+        System.out.println(findElement(root,90));
+        System.out.println(findNodeToRootPath(root,40));
+        System.out.println("Lowest common ancestor between two nodes is : "+lowestCommonAncestor(root,110,70));
+        System.out.println("Distance between two nodes is : "+distanceBetweenNodes(root,110,70));
+//   UnComment below to execute Predecessor And Successor()
+//        Node predecessor=null;
+//        Node successor=null;
+//        state=0;
+//        findPredecessorAndSuccessor(root,40);
+//        if(predecessor==null){
+//            System.out.println("Predecessor Not Found");
+//        } else {
+//            System.out.println("Successor is :"+successor.data);
+//        }
+//        if (successor==null){
+//            System.out.println("Predecessor Not Found");
+//        }
+//        else {
+//            System.out.println("Predecessor is :"+predecessor.data);
+//        }
+//
+        //Travel and Change Trick.
+        ceil = Integer.MAX_VALUE; //smallest among larger
+        floor = Integer.MIN_VALUE; //largest among smaller
+        ceilAndFloor(root,40);
+        System.out.println("Ceil = "+ceil);
+        System.out.println("Floor = "+floor);
+        kthLargestElement(root,3);
+        returnSumAndCalculateMaxSumOfSubTree(root); //will return maximum sum along with maximum sub node.
+        System.out.println(maximumsubnode+" @ "+maxsum);
+        calcDiaReturnHeight(root);
+        System.out.println("Diameter of Generic Tree is : "+dia);
+        IterativePreOrderAndPostOrder(root);
     }
 }
