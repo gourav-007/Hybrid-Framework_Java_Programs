@@ -1,5 +1,6 @@
 package samplepkg;
 
+import java.awt.event.MouseAdapter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
@@ -281,24 +282,192 @@ public class BinaryTree {
         printKLevelsDown(node.right,k-1);
     }
 
-    public static void main(String[] args) {
-            Integer[] arr = {50, 25, 12, null, null, 37, 30, null, null, null,75, 62, null, 70, null, null, 87, null, null};
-            Node root = construct(arr);
-            System.out.println("left<--Node-->right");
-            display(root);
-            System.out.println("Size of given Binary Tree is : "+size(root));
-            System.out.println("Maximum in Binary Tree is : "+max(root));
-            System.out.println("Sum of nodes in Binary Tree is : "+sum(root));
-            System.out.println("Height of Binary Tree is : "+height(root));
-            System.out .println("Printing Pre-Order, In-Order, Post-Order of a Binary Tree...");
-            traversals(root);
-            levelOrderTraversal(root);
-            iterativeLevelOrderTraversal(root);
-            //finding and printing the path from element to node.
-            path = new ArrayList<>();
-            System.out.println("Found Path ? "+findNodeToRoot(root,70));
-            System.out.println("Node to Root Path : " +path);
-            System.out.println("Printing K Levels Down....");
-            printKLevelsDown(root,1);
+    public static void pathToLeafFromRoot(Node node, String path, int sum, int lo, int hi) {
+        if (node == null) { //1
+            return;
         }
+        if (node.left == null && node.right == null) { //2
+            sum += node.data; //3
+            if (sum >= lo && sum <= hi) { //4
+                System.out.println(path + node.data);
+            }
+            return;
+        }
+        pathToLeafFromRoot(node.left, path + node.data + " ", sum + node.data, lo, hi); //5
+        pathToLeafFromRoot(node.right, path + node.data + " ", sum + node.data, lo, hi);
+
     }
+
+    public static Node transformToLeftClonedTree(Node node){
+        if(node==null){
+            return null;
+        }
+        Node lcr = transformToLeftClonedTree(node.left);
+        Node rcr  = transformToLeftClonedTree(node.right);
+
+        Node new_node = new Node(node.data,lcr,null);
+        node.left = new_node;
+        node.right = rcr;
+
+        return node;
+    }
+
+    public static Node transformBackFromLeftClonedTree(Node node){
+
+        if(node==null){
+            return null;
+        }
+
+        Node lcr  = transformBackFromLeftClonedTree(node.left.left); //here we want recursion on left's left.
+        Node rcr  = transformBackFromLeftClonedTree(node.right);
+
+        node.left = lcr;
+        node.right=rcr;
+
+        return node;
+    }
+
+    public static void printSingleChildNodes(Node node, Node parent){
+        if(node==null){
+            return;
+        }
+
+        if(parent != null && parent.left == node && parent.right==null){
+            System.out.println(node.data);
+        } else if(parent!=null && parent.right==node && parent.left==null){
+            System.out.println(node.data);
+        }
+        printSingleChildNodes(node.left,node);
+        printSingleChildNodes(node.right,node);
+    }
+
+    public static Node removeLeaves(Node node){
+        if(node == null){
+            return null;
+        }
+
+        if(node.left==null && node.right==null){
+            return null;
+        }
+
+        node.left = removeLeaves(node.left);
+        node.right = removeLeaves(node.right);
+
+        return node;
+    }
+
+    public static int diameter1(Node node){
+        if(node==null){
+            return 0;
+        }
+
+        //maximum distance between two nodes of LHS.
+        int ld = diameter1(node.left);
+        //maximum distance between two nodes of RHS.
+        int rd = diameter1(node.right);
+        int factor = height(node.left) + height(node.right) + 2;
+        int dia = Math.max(factor,Math.max(ld,rd));
+
+        return dia;
+    }
+
+//Need to be FIX.
+//    static class DPair {
+//        int ht;
+//        int dia;
+//    }
+//    public static DPair diameter2(Node node) {
+//        if (node == null) {
+//            DPair bp = new DPair();
+//            bp.ht = -1;
+//            bp.dia = 0;
+//            return bp;
+//        }
+//
+//        DPair lp = diameter2(node.left);
+//        DPair rp = diameter2(node.right);
+//
+//        DPair mp = new DPair();
+//        mp.ht = Math.max(lp.ht, rp.ht) + 1;
+//        mp.dia = Math.max(lp.ht + rp.ht + 2, Math.max(lp.dia, rp.dia));
+//        return mp;
+//    }
+//
+//    static int diam=0;
+//    public static int diameter3(Node node){
+//        if(node==null){
+//            return -1;
+//        }
+//
+//        int lchildheight = diameter3(node.left);
+//        int rchildheight = diameter3(node.right);
+//
+//        int dia = lchildheight + rchildheight + 2;
+//        if(dia > diam){
+//           diam = Math.max(diam, dia) ;
+//       }
+//
+//        diam = Math.max(lchildheight,rchildheight)+1;
+//
+//       return diam;
+//    }
+
+    static int result = 0;
+    public static int findTilt(Node root) {
+        /*
+        Tilt of a node is the absolute value of difference between sum of nodes in it's left subtree and right subtree.
+        Tilt of the whole tree is represented as the sum of tilt of all it's nodes.
+         */
+        postOrder(root);
+        return result;
+
+    }
+        private static int postOrder(Node root) {
+            if (root == null) {
+                return 0;
+            }
+            int left = postOrder(root.left);
+            int right = postOrder(root.right);
+            result += Math.abs(left - right);
+            return left + right + root.data;
+        }
+
+    public static void main(String[] args) {
+        Integer[] arr = {50, 25, 12, null, null, 37, 30, null, null, null,75, 62, null, 70, null, null, 87, null, null};
+        Node root = construct(arr);
+        System.out.println("left<--Node-->right");
+        display(root);
+        System.out.println("Size of given Binary Tree is : "+size(root));
+        System.out.println("Maximum in Binary Tree is : "+max(root));
+        System.out.println("Sum of nodes in Binary Tree is : "+sum(root));
+        System.out.println("Height of Binary Tree is : "+height(root));
+        System.out .println("Printing Pre-Order, In-Order, Post-Order of a Binary Tree...");
+        traversals(root);
+        levelOrderTraversal(root);
+        iterativeLevelOrderTraversal(root);
+        //finding and printing the path from element to node.
+        path = new ArrayList<>();
+        System.out.println("Found Path ? "+findNodeToRoot(root,70));
+        System.out.println("Node to Root Path : " +path);
+        System.out.println("Printing K Levels Down....");
+        printKLevelsDown(root,1);
+        System.out.println("Printing Path To Leaf From Root....");
+        pathToLeafFromRoot(root,"",0,50,250);
+        transformToLeftClonedTree(root);
+        display(root);
+        System.out.println("Transforming Back to original BT...");
+        transformBackFromLeftClonedTree(root);
+        display(root);
+//
+//        System.out.println("Removing Leaves...");
+//        removeLeaves(root);
+//        display(root);
+
+        System.out.println("Diameter of given BT is : "+ diameter1(root));
+//
+//        DPair p = new DPair();
+//        System.out.println(p.dia);
+//
+        System.out.println(findTilt(root));
+    }
+}
