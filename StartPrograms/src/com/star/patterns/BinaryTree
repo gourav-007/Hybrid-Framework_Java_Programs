@@ -411,26 +411,51 @@ public class BinaryTree {
 //
 //       return diam;
 //    }
-
-    static int result = 0;
-    public static int findTilt(Node root) {
-        /*
-        Tilt of a node is the absolute value of difference between sum of nodes in it's left subtree and right subtree.
-        Tilt of the whole tree is represented as the sum of tilt of all it's nodes.
-         */
-        postOrder(root);
-        return result;
-
-    }
-        private static int postOrder(Node root) {
-            if (root == null) {
-                return 0;
-            }
-            int left = postOrder(root.left);
-            int right = postOrder(root.right);
-            result += Math.abs(left - right);
-            return left + right + root.data;
+        /* Tilt of a node is the absolute value of difference between sum of nodes in it's left subtree and right subtree.
+           Tilt of the whole tree is represented as the sum of tilt of all it's nodes.*/
+    static int tilt = 0;
+    public static int findTilt(Node node) {
+        if(node==null){
+            return 0;
         }
+
+        //will return left's sum and change tilt for left side.
+        int ls = findTilt(node.left);
+        //will return right's sum and change tilt for right side.
+        int rs = findTilt(node.right);
+
+        int ltilt = Math.abs(ls-rs);
+        tilt += ltilt;
+
+        int ts = ls + rs + node.data;
+        return ts;
+    }
+
+    public static class BSTPair{
+        int min;
+        int max;
+        boolean isBST;
+    }
+
+    public static BSTPair isTreeBST(Node node) {
+
+        if(node==null){
+            BSTPair bp = new BSTPair();
+            bp.isBST=true;
+            bp.min=Integer.MAX_VALUE;
+            bp.max=Integer.MIN_VALUE;
+        }
+
+        BSTPair lp =  isTreeBST(node.left);
+        BSTPair rp =  isTreeBST(node.right);
+
+        BSTPair mp = new BSTPair();
+        mp.isBST = lp.isBST && rp.isBST && (node.data >= lp.max && node.data <= rp.min);
+        mp.min = Math.min(node.data,Math.min(lp.min, rp.min));
+        mp.max = Math.max(node.data,Math.max(lp.max,rp.max));
+
+        return mp;
+    }
 
     public static void main(String[] args) {
         Integer[] arr = {50, 25, 12, null, null, 37, 30, null, null, null,75, 62, null, 70, null, null, 87, null, null};
@@ -469,5 +494,7 @@ public class BinaryTree {
 //        System.out.println(p.dia);
 //
         System.out.println(findTilt(root));
+        BSTPair p = new BSTPair();
+        System.out.println("Is Tree Binary Search Tree ? "+p.isBST);
     }
 }
