@@ -1,6 +1,5 @@
 package samplepkg;
 
-import java.awt.event.MouseAdapter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
@@ -8,7 +7,7 @@ import java.util.Stack;
 
 public class BinaryTree {
 
-    public static class Node{
+    public static class Node {
 
         int data;
         Node left;
@@ -25,7 +24,7 @@ public class BinaryTree {
         }
     }
 
-    public static class Pair{
+    public static class Pair {
         Node node;
         int level;
 
@@ -33,21 +32,22 @@ public class BinaryTree {
             this.node = node;
             this.level = level;
         }
-        Pair(){
+
+        Pair() {
 
         }
     }
 
-    public static void display(Node node){
+    public static void display(Node node) {
         //Self Node Work.
-        if(node == null){
+        if (node == null) {
             return;
         }
 
         String str = "";
-        str += node.left==null?".":node.left.data+"";
-        str += "<-- "+node.data+" -->";
-        str += node.right==null?".":node.right.data+"";
+        str += node.left == null ? "." : node.left.data + "";
+        str += "<-- " + node.data + " -->";
+        str += node.right == null ? "." : node.right.data + "";
         System.out.println(str);
 
         //recursive call for left and right.
@@ -55,11 +55,11 @@ public class BinaryTree {
         display(node.right);
     }
 
-    public static Node construct(Integer[]arr) {
+    public static Node construct(Integer[] arr) {
 
         Node root = new Node(arr[0]);
 
-        Stack< Pair>st = new Stack< >();
+        Stack<Pair> st = new Stack<>();
         Pair root_pair = new Pair(root, 1);
 
         st.push(root_pair);
@@ -79,8 +79,7 @@ public class BinaryTree {
                     st.push(lcp);
                 }
                 idx++;
-            }
-            else if (top.level == 2) {
+            } else if (top.level == 2) {
                 //waiting for right child
                 top.level++;
                 if (arr[idx] != null) {
@@ -91,8 +90,7 @@ public class BinaryTree {
                     st.push(rcp);
                 }
                 idx++;
-            }
-            else if (top.level == 3) {
+            } else if (top.level == 3) {
                 st.pop();
             }
         }
@@ -101,9 +99,9 @@ public class BinaryTree {
 
     }
 
-    public static int size(Node node){
+    public static int size(Node node) {
         int size = 0;
-        if(node==null){
+        if (node == null) {
             return 0;
         }
         int lc = size(node.left); //left size
@@ -117,83 +115,84 @@ public class BinaryTree {
 
     static int maxnode = 0;
     static int maxsum = Integer.MIN_VALUE;
-    public static int sum(Node node){
-        int sum=0;
 
-        if(node==null){
+    public static int sum(Node node) {
+        int sum = 0;
+
+        if (node == null) {
             return 0;
         }
 
         int lsum = sum(node.left); //left sum.
         sum = sum + lsum;
         int rsum = sum(node.right); //right sum.
-        sum = sum  + rsum;
+        sum = sum + rsum;
 
         sum = sum + node.data; //root adding itself to sum.
 
-        if(sum>maxsum){
+        if (sum > maxsum) {
             maxsum = sum;
             maxnode = node.data;
         }
         return sum;
     }
 
-    public static int max(Node node){
+    public static int max(Node node) {
         int max = Integer.MIN_VALUE;
 
-        if(node == null){
+        if (node == null) {
             return 0;
         }
 
         int lmax = max(node.left); //left max.
-        max  = Math.max(lmax,max);
+        max = Math.max(lmax, max);
         int rmax = max(node.right); //right max.
-        max = Math.max(rmax,max);
+        max = Math.max(rmax, max);
 
-        max = Math.max(node.data,max);
+        max = Math.max(node.data, max);
         return max;
     }
 
-    public static int height(Node node){
-        if(node == null){
+    public static int height(Node node) {
+        if (node == null) {
             return -1; // in case of edge;
             //return 0 in case of nodes.
         }
         int lheight = height(node.left); //left height.
-        int rheight  = height(node.right); //right height.
-        int theight = Math.max(lheight,rheight);
+        int rheight = height(node.right); //right height.
+        int theight = Math.max(lheight, rheight);
 
         theight = theight + 1; //adding height of self.
         return theight;
     }
 
-    public static void traversals(Node node){
-        if(node==null){
+    public static void traversals(Node node) {
+        if (node == null) {
             return;
         }
-        System.out.println("Pre Order : "+node.data); //pre order
+        System.out.println("Pre Order : " + node.data); //pre order
         traversals(node.left);
-        System.out.println("In Order "+node.data); //in order.
+        System.out.println("In Order " + node.data); //in order.
         traversals(node.right);
-        System.out.println("Post Order :"+node.data); //post order.
+        System.out.println("Post Order :" + node.data); //post order.
     }
 
-    public static void levelOrderTraversal(Node node){
+    public static void levelOrderTraversal(Node node) {
         //Remove-Print-Add
         Queue<Node> queue = new ArrayDeque<>();
         queue.add(node);
 
-        while (!queue.isEmpty()){
-            int count  = queue.size();
-            for(int i=0;i<count;i++) {
+        while (!queue.isEmpty()) {
+            int count = queue.size();
+            for (int i = 0; i < count; i++) {
                 node = queue.remove();
                 System.out.print(node.data + "-->");
 
-                if(node.left!=null) {
+                if (node.left != null) {
                     queue.add(node.left);
                 }
 
-                if(node.right!=null) {
+                if (node.right != null) {
                     queue.add(node.right);
                 }
             }
@@ -219,24 +218,25 @@ public class BinaryTree {
                     stack.push(leftpair);
                 }
             } else if (top.level == 2) {
-                in = in + top.node.data+" ";
+                in = in + top.node.data + " ";
                 top.level++;
                 if (top.node.right != null) {
                     Pair rightpair = new Pair(top.node.right, 1);
                     stack.push(rightpair);
                 }
             } else {
-                post = post + top.node.data+" ";
+                post = post + top.node.data + " ";
                 stack.pop();
             }
         }
-        System.out.println("Pre Order : "+pre+" ");
-        System.out.println("In Order : "+in+" ");
-        System.out.println("Post Order : "+post+" ");
+        System.out.println("Pre Order : " + pre + " ");
+        System.out.println("In Order : " + in + " ");
+        System.out.println("Post Order : " + post + " ");
     }
 
     static ArrayList<Integer> path;
-    public static boolean findNodeToRoot(Node node,int element) {
+
+    public static boolean findNodeToRoot(Node node, int element) {
         /* Here we are checking element in Binary Tree
         if node is that element return true;
         else check in left sub tree (if false).
@@ -244,23 +244,23 @@ public class BinaryTree {
         And while coming back to node from finding element we are adding the same in ArrayList.
         and returning the same path contains element to node.*/
 
-        if(node==null){             //Base Case
+        if (node == null) {             //Base Case
             return false;
         }
 
-        if(node.data==element){     //Self Check
+        if (node.data == element) {     //Self Check
             path.add(node.data);
             return true;
         }
 
-        boolean find_in_left_child = findNodeToRoot(node.left,element);
-        if(find_in_left_child){     //Left Check
+        boolean find_in_left_child = findNodeToRoot(node.left, element);
+        if (find_in_left_child) {     //Left Check
             path.add(node.data);
             return true;
         }
 
-        boolean find_in_right_child = findNodeToRoot(node.right,element);
-        if(find_in_right_child){    //Right Check
+        boolean find_in_right_child = findNodeToRoot(node.right, element);
+        if (find_in_right_child) {    //Right Check
             path.add(node.data);
             return true;
         }
@@ -268,18 +268,18 @@ public class BinaryTree {
         return false;
     }
 
-    public static void printKLevelsDown(Node node, int k){
+    public static void printKLevelsDown(Node node, int k) {
         //Printing K-Levels Down.
-        if(node==null || k < 0){
+        if (node == null || k < 0) {
             return;
         }
 
-        if(k==0){
-            System.out.print(node.data+" ");
+        if (k == 0) {
+            System.out.print(node.data + " ");
         }
 
-        printKLevelsDown(node.left,k-1);
-        printKLevelsDown(node.right,k-1);
+        printKLevelsDown(node.left, k - 1);
+        printKLevelsDown(node.right, k - 1);
     }
 
     public static void pathToLeafFromRoot(Node node, String path, int sum, int lo, int hi) {
@@ -298,55 +298,55 @@ public class BinaryTree {
 
     }
 
-    public static Node transformToLeftClonedTree(Node node){
-        if(node==null){
+    public static Node transformToLeftClonedTree(Node node) {
+        if (node == null) {
             return null;
         }
         Node lcr = transformToLeftClonedTree(node.left);
-        Node rcr  = transformToLeftClonedTree(node.right);
+        Node rcr = transformToLeftClonedTree(node.right);
 
-        Node new_node = new Node(node.data,lcr,null);
+        Node new_node = new Node(node.data, lcr, null);
         node.left = new_node;
         node.right = rcr;
 
         return node;
     }
 
-    public static Node transformBackFromLeftClonedTree(Node node){
+    public static Node transformBackFromLeftClonedTree(Node node) {
 
-        if(node==null){
+        if (node == null) {
             return null;
         }
 
-        Node lcr  = transformBackFromLeftClonedTree(node.left.left); //here we want recursion on left's left.
-        Node rcr  = transformBackFromLeftClonedTree(node.right);
+        Node lcr = transformBackFromLeftClonedTree(node.left.left); //here we want recursion on left's left.
+        Node rcr = transformBackFromLeftClonedTree(node.right);
 
         node.left = lcr;
-        node.right=rcr;
+        node.right = rcr;
 
         return node;
     }
 
-    public static void printSingleChildNodes(Node node, Node parent){
-        if(node==null){
+    public static void printSingleChildNodes(Node node, Node parent) {
+        if (node == null) {
             return;
         }
 
-        if(parent != null && parent.left == node && parent.right==null){
+        if (parent != null && parent.left == node && parent.right == null) {
             System.out.println(node.data);
-        } else if(parent!=null && parent.right==node && parent.left==null){
+        } else if (parent != null && parent.right == node && parent.left == null) {
             System.out.println(node.data);
         }
-        printSingleChildNodes(node.left,node);
-        printSingleChildNodes(node.right,node);
+        printSingleChildNodes(node.left, node);
+        printSingleChildNodes(node.right, node);
     }
 
-    public static Node removeLeaves(Node node){
-        if(node == null){
+    public static Node removeLeaves(Node node) {
+        if (node == null) {
             return null;
         }
 
-        if(node.left==null && node.right==null){
+        if (node.left == null && node.right == null) {
             return null;
         }
 
@@ -356,8 +356,8 @@ public class BinaryTree {
         return node;
     }
 
-    public static int diameter1(Node node){
-        if(node==null){
+    public static int diameter1(Node node) {
+        if (node == null) {
             return 0;
         }
 
@@ -366,12 +366,12 @@ public class BinaryTree {
         //maximum distance between two nodes of RHS.
         int rd = diameter1(node.right);
         int factor = height(node.left) + height(node.right) + 2;
-        int dia = Math.max(factor,Math.max(ld,rd));
+        int dia = Math.max(factor, Math.max(ld, rd));
 
         return dia;
     }
 
-//Need to be FIX.
+    //Need to be FIX.
 //    static class DPair {
 //        int ht;
 //        int dia;
@@ -414,8 +414,9 @@ public class BinaryTree {
         /* Tilt of a node is the absolute value of difference between sum of nodes in it's left subtree and right subtree.
            Tilt of the whole tree is represented as the sum of tilt of all it's nodes.*/
     static int tilt = 0;
+
     public static int findTilt(Node node) {
-        if(node==null){
+        if (node == null) {
             return 0;
         }
 
@@ -424,14 +425,14 @@ public class BinaryTree {
         //will return right's sum and change tilt for right side.
         int rs = findTilt(node.right);
 
-        int ltilt = Math.abs(ls-rs);
+        int ltilt = Math.abs(ls - rs);
         tilt += ltilt;
 
         int ts = ls + rs + node.data;
         return ts;
     }
 
-    public static class BSTPair{
+    public static class BSTPair {
         int min;
         int max;
         boolean isBST;
@@ -439,26 +440,118 @@ public class BinaryTree {
 
     public static BSTPair isTreeBST(Node node) {
 
-        if(node==null){
+        if (node == null) {
             BSTPair bp = new BSTPair();
-            bp.isBST=true;
-            bp.min=Integer.MAX_VALUE;
-            bp.max=Integer.MIN_VALUE;
+            bp.isBST = true;
+            bp.min = Integer.MAX_VALUE;
+            bp.max = Integer.MIN_VALUE;
+
+            return bp;
         }
 
-        BSTPair lp =  isTreeBST(node.left);
-        BSTPair rp =  isTreeBST(node.right);
+        BSTPair lp = isTreeBST(node.left);
+        BSTPair rp = isTreeBST(node.right);
 
         BSTPair mp = new BSTPair();
         mp.isBST = lp.isBST && rp.isBST && (node.data >= lp.max && node.data <= rp.min);
-        mp.min = Math.min(node.data,Math.min(lp.min, rp.min));
-        mp.max = Math.max(node.data,Math.max(lp.max,rp.max));
+        mp.min = Math.min(node.data, Math.min(lp.min, rp.min));
+        mp.max = Math.max(node.data, Math.max(lp.max, rp.max));
 
         return mp;
     }
 
+    //Is_Balanced_Tree?
+    //Travel and change method,
+    static boolean isBal;
+    public static int isBalancedTree(Node node){
+        if(node==null){
+            return 0;
+        }
+        int lh = isBalancedTree(node.left);
+        int rh = isBalancedTree(node.right);
+        int th = Math.max(lh,rh) + 1;
+
+        int gap = Math.abs(lh-rh);
+        if(gap>1){
+            isBal = false;
+        }
+        return th;
+    }
+
+    //Pair Method
+
+    public static class BalPair{
+        int ht;
+        boolean isBal;
+    }
+    public static BalPair isBalnc(Node node){
+
+        if(node==null){
+            BalPair bp = new BalPair();
+            bp.isBal = false;
+            bp.ht = -1;
+
+            return bp;
+        }
+
+       BalPair lp =  isBalnc(node.left);
+       BalPair rp =  isBalnc(node.right);
+
+       BalPair mbp = new BalPair();
+       mbp.ht = Math.max(lp.ht,rp.ht) + 1;
+       mbp.isBal = Math.abs(lp.ht-rp.ht) <=1 && lp.isBal && rp.isBal;
+
+       return mbp;
+    }
+
+//    Largest BST SubTree.
+
+    public static class BSTPair2{
+        int min;
+        int max;
+        Node root;
+        int size;
+        boolean isBST;
+    }
+
+    public static BSTPair2 largestBSTSubTree(Node node){
+        if(node==null){
+            BSTPair2 bp2 = new BSTPair2();
+            bp2.min = Integer.MAX_VALUE;
+            bp2.max = Integer.MIN_VALUE;
+            bp2.isBST = true;
+            bp2.size = 0;
+            bp2.root = null;
+
+            return bp2;
+        }
+
+       BSTPair2  lp2 = largestBSTSubTree(node.left);
+       BSTPair2 rp2 = largestBSTSubTree(node.right);
+
+       BSTPair2 mp2 = new BSTPair2();
+       mp2.min = Math.min(node.data,Math.min(lp2.min,rp2.min));
+       mp2.max = Math.max(node.data,Math.max(lp2.max,rp2.max));
+       mp2.isBST = lp2.isBST && rp2.isBST && (node.data>=lp2.max && node.data <= rp2.min);
+
+       if(mp2.isBST) {
+           mp2.size = lp2.size + rp2.size + 1;
+           mp2.root = node;
+       } else if(lp2.size > rp2.size){
+           mp2.size = lp2.size;
+           mp2.root = lp2.root;
+       } else{
+           mp2.size = rp2.size;
+           mp2.root = rp2.root;
+       }
+
+       return mp2;
+    }
+
+
     public static void main(String[] args) {
         Integer[] arr = {50, 25, 12, null, null, 37, 30, null, null, null,75, 62, null, 70, null, null, 87, null, null};
+//        Integer[] arr = {50,25,12,null,null,37,null,null,75,62,null,null,87,null,null};
         Node root = construct(arr);
         System.out.println("left<--Node-->right");
         display(root);
@@ -494,7 +587,19 @@ public class BinaryTree {
 //        System.out.println(p.dia);
 //
         System.out.println(findTilt(root));
-        BSTPair p = new BSTPair();
+
+        BSTPair p = isTreeBST(root);
         System.out.println("Is Tree Binary Search Tree ? "+p.isBST);
+
+        //Largest Sub Tree at Node with Size.
+        BSTPair2 bstPair2 = largestBSTSubTree(root);
+        System.out.println(bstPair2.root.data+ " root @ size "+bstPair2.size);
+
+        isBalancedTree(root);
+        System.out.println("is Tree Balanced : "+isBal);
+
+        //run with pair method.
+        BalPair pp = isBalnc(root);
+        System.out.println(pp.isBal);
     }
 }
