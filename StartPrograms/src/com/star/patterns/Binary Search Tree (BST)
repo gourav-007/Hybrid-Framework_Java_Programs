@@ -1,0 +1,406 @@
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class BinarySearchTree {
+
+    public static class Node{
+        Node left;
+        Node right;
+        int data;
+
+        public Node(int data) {
+            this.data = data;
+        }
+        public Node(int data, Node lc, Node rc) {
+            this.left = lc;
+            this.right = rc;
+            this.data = data;
+        }
+    }
+
+    public static Node construct(int [] arr,int lo,int hi){
+        if(lo>hi){
+            return null;
+        }
+
+        int mid = (lo+hi)/2;
+        int data = arr[mid];
+
+        Node lc =  construct(arr,lo,mid-1);
+        Node rc =  construct(arr,mid+1,hi);
+
+        Node node = new Node(data,lc,rc);
+        return node;
+
+    }
+
+    public static void display(Node node){
+        if(node==null){
+            return;
+        }
+        String str ="";
+
+        str += node.left==null?".":node.left.data+"";
+        str += " <-- "+node.data+" --> ";
+        str += node.right==null?".":node.right.data+"";
+        System.out.println(str);
+
+        display(node.left);
+        display(node.right);
+
+    }
+
+    public static int size(Node node) {
+        // write your code here
+        int size=0;
+
+        if(node==null){
+            return 0;
+        }
+
+        int ls = size(node.left);
+        size += ls;
+        int rs = size(node.right);
+        size += rs;
+
+        size+=1;
+        return size;
+
+    }
+
+    static int maxnode = 0;
+    static int maxsum = Integer.MIN_VALUE;
+    public static int sum(Node node) {
+        int sum = 0;
+
+        if(node==null){
+            return 0;
+        }
+
+        int lc = sum(node.left);
+        sum = sum + lc;
+        int rc = sum(node.right);
+        sum = sum + rc;
+
+        sum = sum + node.data;
+
+        if (sum>maxsum){
+            maxsum =sum;
+            maxnode = node.data;
+        }
+        return sum;
+    }
+
+    //    public static int max(Node node) {
+//        int max = Integer.MIN_VALUE;
+//        if(node==null){
+//            return 0;
+//        }
+//
+//        int lc= max(node.left);
+//        max = Math.max(max,lc);
+//        int rc = max(node.right);
+//        max = Math.max(max,rc);
+//
+//        max = Math.max(node.data,max);
+//        return max;
+//    }
+    public static int max(Node node){
+        if(node.right!=null){
+            return max(node.right);
+        } else {
+            return node.data;
+        }
+    }
+    public static int min(Node node){
+        if(node.left!=null){
+            return min(node.left);
+        } else {
+            return node.data;
+        }
+    }
+//
+//    public static int min(Node node) {
+//        // write your code here
+//        int min = Integer.MAX_VALUE;
+//
+//        if(node==null){
+//            return 0;
+//        }
+//
+//        int lc = min(node.left);
+//        min  = Math.min(min,lc);
+//        int rc = min(node.right);
+//        min = Math.min(min,rc);
+//
+//        min = Math.min(node.data,min);
+//        return min;
+//    }
+
+//    public static boolean find(Node node, int data){
+//        // write your code here
+//        if(node==null){
+//            return false;
+//        }
+//        if(node.data==data){
+//            return true;
+//        }
+//        boolean lc = find(node.left,data);
+//        if(lc){
+//            return true;
+//        }
+//        boolean rc = find(node.right,data);
+//        if(rc){
+//            return true;
+//        }
+//        return false;
+//    }
+
+    public static boolean find(Node node, int data){
+        if(node==null){
+            return false;
+        }
+        if(data>node.data){
+            return find(node.right,data);
+        } else if (data<node.data) {
+            return find(node.left,data);
+        } else {
+            return true;
+        }
+    } //O(log(n))
+
+    public static Node addNode(Node node, int element){
+
+        if(node==null){
+            return new Node(element,null,null);
+        }
+
+        if(element>node.data){
+            node.right = addNode(node.right,element);
+        } else if (element<node.data) {
+            node.left = addNode(node.left,element);
+        }  //nothing to do.
+
+        return node;
+    }
+    public static Node removeNode(Node node,int element){
+        if(node==null){
+            return null;
+        }
+        if(element>node.data){
+            node.right = removeNode(node.right,element);
+        } else if(element < node.data) {
+            node.left = removeNode(node.left,element);
+        } else {
+            if(node.left!=null && node.right!=null){
+                int lmax = max(node.left); //calculate max of left child.
+                node.data = lmax;
+                node.left = removeNode(node.left,lmax);
+            } else if (node.left!=null) {
+                return node.left;
+            } else if (node.right!=null) {
+                return node.right;
+            } else {
+                return null;
+            }
+        }
+        return node;
+    }
+
+    static  int sum = 0;
+    public static void replaceWithLargerSum(Node node){
+        if(node==null){
+            return;
+        }
+        //Logic -> Reverse In-Order (bcoz in BST inorder is always sorted...by traversing in reverse we visit large node first and
+        // insert into sum varible....and dump the value of sum in next node.)
+        replaceWithLargerSum(node.right);
+        int orgdata = node.data;
+        node.data = sum;
+        sum += orgdata;
+        replaceWithLargerSum(node.left);
+    }
+
+    //least common ancestor (lca)
+    public static int lca(Node node,int element1, int element2){
+        if(element1 < node.data && element2 < node.data){
+            return lca(node.left,element1,element2);
+        }
+        else if (element1>node.data && element2 > node.data){
+            return lca(node.right,element1,element2);
+        }
+        else {
+            return node.data;
+        }
+    }
+
+    public static void printInRange(Node node, int element1, int element2){
+        if(node==null){
+            return;
+        }
+        if(element1 < node.data && element2 < node.data){
+            printInRange(node.left,element1,element2);
+        }
+        else if (element1 > node.data && element2 > node.data){
+            printInRange(node.right,element1,element2);
+        }
+        else{
+            printInRange(node.left,element1,element2);
+            //Printing nodes in between given range element1 and element2 ;
+            System.out.print(node.data+"    "); //in order traversal to get in increasing order.
+            printInRange(node.right,element1,element2);
+        }
+    }
+
+    //Space--O(h) and Time--O(n(h)) where h is height of BST.
+    public static void targetSumPair1(Node root, Node node, int target){
+
+        if(node==null){
+            return;
+        }
+        targetSumPair1(root,node.left,target);
+        int complement  = target - node.data;
+        // e.g. target = 75 , So suppose node.data 100--> 100-75= 25 (search 25 in whole tree
+        //if found then return pair).
+        if(node.data<complement){
+            if(find(root, complement)){
+                System.out.println(node.data+"  "+complement);
+            }
+        }
+
+        targetSumPair1(root,node.right,target);
+
+    }
+
+    //O(n) Space and O(n) time approach
+    public static void targetSumPair2(Node node, ArrayList<Integer> list){
+        if(node==null){
+            return;
+        }
+        targetSumPair2(node.left,list);
+        list.add(node.data);
+        targetSumPair2(node.right,list);
+    }
+
+    //Space--O(h) and time--O(n) approach by Iterative Order, Reverse Iterative Order.
+
+    static class ITPair{
+        public ITPair(Node node, int level) {
+            this.node = node;
+            this.level = level;
+        }
+        Node node;
+        int level=0;
+
+    }
+    public static void targetAndSumPair3(Node node,int target){
+        Stack<ITPair> leftstack = new Stack<>();
+        Stack<ITPair> rightstack = new Stack<>();
+
+        leftstack.push(new ITPair(node,0));
+        rightstack.push(new ITPair(node,0));
+
+        Node left  = getNextFromNormalInorder(leftstack);
+        Node right = getNextFromReverseInorder(rightstack);
+
+        while (left.data < right.data){
+            if(left.data+right.data<target){
+                left  = getNextFromNormalInorder(leftstack);
+            } else if (left.data+right.data>target) {
+                right = getNextFromReverseInorder(leftstack);
+            }else {
+                System.out.println(left.data+"  "+right.data);
+                left  = getNextFromNormalInorder(leftstack);
+                right = getNextFromReverseInorder(leftstack);
+            }
+        }
+    }
+    public static Node getNextFromNormalInorder(Stack<ITPair> st){
+        while (!st.isEmpty()){
+            ITPair top = st.peek();
+
+            if(top.level==0){
+                if(top.node.left!=null){
+                    st.push(new ITPair(top.node.left,0));
+                }
+                top.level++;
+            }else if(top.level==1){
+                if(top.node.right!=null){
+                    st.push(new ITPair(top.node.right,0));
+                }
+                top.level++;
+                return top.node;
+            }else {
+                st.pop();
+            }
+        }
+        return null;
+    }
+    public static Node  getNextFromReverseInorder(Stack<ITPair> st){
+        while (!st.isEmpty()){
+            ITPair top = st.peek();
+
+            if(top.level==0){
+                if(top.node.right!=null){
+                    st.push(new ITPair(top.node.right,0));
+                }
+                top.level++;
+            }else if(top.level==1){
+                if(top.node.left!=null){
+                    st.push(new ITPair(top.node.left,0));
+                }
+                top.level++;
+                return top.node;
+            }else {
+                st.pop();
+            }
+        }
+        return null;
+    }
+
+
+    public static void main(String[] args) {
+        int arr [] = {12,25,37,50,62,75,87};
+        Node root = construct(arr,0,arr.length-1);
+        display(root);
+        System.out.println("Size of BST is : "+size(root));
+        System.out.println("Sum of all Node is : "+sum(root));
+        System.out.println("Max Node in BST : "+max(root));
+        System.out.println("Min Node in BST : "+min(root));
+        System.out.println("Finding element in BST..."+find(root,0));
+        addNode(root,60);
+        System.out.println("element added.");
+        display(root);
+//        removeNode(root,60);
+//        System.out.println("element removed.");
+//        display(root);
+//        replaceWithLargerSum(root);
+//        display(root);
+//        System.out.println("Least Common Ancestor : "+lca(root,60,12));
+        printInRange(root,50,100);
+        System.out.println("\nPrinting Target Sum Pair...");
+        targetSumPair1(root,root,49);
+
+        //Second Approach of Target and SUm Pair.
+        int target = 49;
+        ArrayList<Integer> list = new ArrayList<>();
+        targetSumPair2(root,list);
+        int left_index = 0;
+        int right_index = list.size()-1;
+        while (left_index<right_index) {
+            int left = list.get(left_index);
+            int right = list.get(right_index);
+
+            if (left + right < target) {
+                left_index++;
+            } else if (left + right > target) {
+                right_index--;
+            } else {
+                System.out.println(left + "   " + right);
+                left_index++;
+                right_index--;
+            }
+        }
+
+    }
+}
