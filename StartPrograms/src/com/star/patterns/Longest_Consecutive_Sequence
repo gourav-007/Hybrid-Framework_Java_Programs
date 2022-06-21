@@ -1,0 +1,40 @@
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class HashMaps {
+    //Longest Consecutive Sequence.
+    public static void main(String[] args) {
+        int [] arr1 = {36, 41, 56, 35, 44, 33, 34, 92, 43, 32, 42};
+        HashMap<Integer,Boolean> map = new HashMap<>();
+        for (int i : arr1){
+            map.put(i,true);
+        }
+        for (int i : arr1){
+            if (map.containsKey(i-1)){
+                map.put(i,false);
+            }
+        }
+
+        int maxstartpoint = 0;
+        int max_length =0;
+        for (int i : arr1){
+            if(map.get(i)) {
+                int length = 1;
+                int temp_startpoint = i;
+                while (map.containsKey(i + length)) {
+                    length++;
+                }
+
+                if (length > max_length) {
+                    maxstartpoint = temp_startpoint;
+                    max_length = length;
+                }
+            }
+        }
+
+        for (int i=0;i<max_length;i++){
+            System.out.print(maxstartpoint+i+"  ");
+        }
+    }
+}
