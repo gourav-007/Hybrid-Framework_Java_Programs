@@ -1,0 +1,24 @@
+
+public class HashMaps {
+    //Common elements in both the Arrays.
+    public static void main(String[] args) {
+        char [] arr1 = {'a', 'b', 'c', 'd', 'e', 'f'};
+        char [] arr2 = {'b', 'd', 'e', 'h', 'g', 'c'};
+
+        HashMap<Character,Integer> map = new HashMap<>();
+        for (char c : arr1) {
+            if (map.containsKey(c)) {
+                map.put(c, map.get(c) + 1);
+            }
+            else {
+                map.put(c,1);
+            }
+        }
+        for (char v : arr2){
+            if(map.containsKey(v)){
+                System.out.print(v + "  ");
+                map.remove(v);
+            }
+        }
+    }
+}
