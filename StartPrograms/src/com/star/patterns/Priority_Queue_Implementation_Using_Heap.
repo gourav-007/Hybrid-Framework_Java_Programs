@@ -1,0 +1,75 @@
+import java.util.ArrayList;
+
+public class PriorityQueue {
+    //PriorityQueue implementation using heap.
+    public static class PQ {
+        ArrayList<Integer> data;
+
+        public PQ() {
+            data = new ArrayList<>();
+        }
+
+        public void add(int val) {
+            data.add(val);
+            upheapify(data.size()-1); //Call upheapify where we are checking Heap Order Property.
+        }
+
+        private void upheapify(int i) {
+            if(i==0) {
+                return;
+            }
+            int pi = (i-1)/2;
+            if(data.get(i)<data.get(pi)){
+                swap(i,pi);
+                upheapify(pi);
+            }
+        }
+
+        private void swap(int i, int j){
+            int ith = data.get(i);
+            int jth = data.get(j);
+            data.set(i,jth);
+            data.set(j,ith);
+        }
+
+        public int remove() {
+            //Swap first and last
+            swap(0, data.size()-1);
+            int val = data.remove(data.size()-1);
+            downheapify(0);
+            return val;
+        }
+
+        private void downheapify(int pi) {
+            int mini = pi;
+            int li = 2 * pi + 1; //calculate left child.
+            if (li<data.size() && data.get(li) < data.get(mini)){
+                mini = li;
+            }
+
+            int ri = 2 * pi + 1; //calculate right child.
+            if (ri<data.size() && data.get(ri) < data.get(mini)){
+                mini = ri;
+            }
+
+            if(mini != pi){
+                swap(pi,mini); //swap
+                downheapify(mini); //downheapify recursion
+            }
+
+        }
+
+        public int peek() {
+            if(this.size()==0){
+                System.out.println("UnderFlow");
+                return -1;
+            }
+
+            return data.get(0);
+        }
+
+        public int size() {
+            return data.size(); //returning size
+        }
+    }
+}
