@@ -1,0 +1,39 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class getKeyPad {
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String str = sc.next();
+        ArrayList<String> words = getKeyPadCombination(str);
+        System.out.println(words);
+    }
+
+    static String[] codes = {".;","abc","def","ghi","jkl","mno","pqrs","tu","vwx","yz"};
+
+    private static ArrayList<String> getKeyPadCombination(String str) {
+
+        if(str.length()==0){
+            ArrayList<String> bres = new ArrayList<>();
+            bres.add("");
+            return bres;
+        }
+
+        char ch = str.charAt(0);
+        String ros = str.substring(1);
+
+        ArrayList<String> rres = getKeyPadCombination(ros);
+        ArrayList<String> mres = new ArrayList<>();
+
+        String codeforeach = codes[ch-'0'];
+        for (int i=0;i<codeforeach.length();i++){
+            char chcode = codeforeach.charAt(i);
+            for (String rstr : rres){
+                mres.add(chcode+rstr);
+            }
+        }
+
+        return mres;
+    }
+}
