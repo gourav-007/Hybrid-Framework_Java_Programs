@@ -1,0 +1,40 @@
+
+import java.util.Scanner;
+
+public class floodFill {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[][] arr = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                arr[i][j] = sc.nextInt();
+            }
+        }
+
+        boolean[][] visited = new boolean[n][m];
+        floodFiller(arr,0,0,"",visited);
+    }
+
+    public static void floodFiller(int[][] maze, int row, int col,String psf,boolean[][] visited) {
+        //base case
+        if (row<0 || col<0 || row== maze.length || col== maze[0].length-1 || maze[row][col]==1 || visited[row][col]){
+            return;
+        }
+
+        if (row== maze.length-1 && col==maze[0].length-1){
+            System.out.println(psf);
+            return;
+        }
+
+        visited[row][col]=true; //mark cell visited before call
+        floodFiller(maze, row-1, col, psf+"t", visited); //top call
+        floodFiller(maze, row, col-1, psf+"l", visited); //left call
+        floodFiller(maze, row+1, col, psf+"d", visited); //down call
+        floodFiller(maze, row, col+1, psf+"r", visited); //right call
+        visited[row][col]=false; //mark cell unvisited after call.
+
+    }
+}
