@@ -1,0 +1,39 @@
+import java.util.Scanner;
+
+public class targetSumSubsets {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int [] arr = new int[n];
+
+        for (int i=0;i< arr.length;i++){
+            arr[i] = sc.nextInt();
+        }
+
+        int tar = sc.nextInt(); //target
+
+        printTargetSumSubset(arr,0,"",0,tar);
+    }
+
+    private static void printTargetSumSubset(int[] arr, int idx, String set, int sumofset, int tar) {
+        if (idx==arr.length){
+            if (sumofset==tar) {
+                System.out.println(set);
+            }
+            return;
+        }
+
+        //their is two way...either idx will add itself with the set or will not add.
+        printTargetSumSubset(arr, idx+1, set+arr[idx]+", ",sumofset+arr[idx], tar); //if yes
+        printTargetSumSubset(arr, idx+1, set, sumofset, tar); //if no
+    }
+}
+
+//input :  5#lengthofarr 10 20 30 40 50 60#target
+//output : 
+10, 20, 30, 
+10, 50, 
+20, 40, 
+ 
