@@ -1,0 +1,29 @@
+public class String
+{
+    private static void expandString(String input) {
+        int i,j,k;
+        StringBuffer sb = new StringBuffer();
+        for (i=0;i<input.length();i++){
+            char ch = input.charAt(i);
+            int num = ch - '0';
+            StringBuffer temp = new StringBuffer();
+            for (j=i+2;input.charAt(j)!=')';j++) {
+                temp.append(input.charAt(j));
+            }
+            for (k=1;k<=num;k++) {
+                sb.append(temp);
+            }
+            i=j;
+        }
+        System.out.println(sb);
+    }
+
+    public static void main(String[] args) {
+        expandString("3(ab)4(cd)");
+    }
+
+}
+
+
+//input : "3(ab)4(cd)"
+//output : abababcdcdcdcd
