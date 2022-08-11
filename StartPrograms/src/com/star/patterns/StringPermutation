@@ -1,0 +1,29 @@
+public class StringPermutation {
+
+    public static boolean isPermutation(String input1, String input2){
+        int length = input1.length();
+        int [] arr = new int[256];
+        int i;
+        char x;
+        for (i=0;i<length;i++){
+            x = input1.charAt(i);
+            arr[x]++;
+            x = input2.charAt(i);
+            arr[x]--;
+        }
+
+        for (i=0;i<length;i++){
+            x = input1.charAt(i);
+            if (arr[x]!=0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isPermutation("abd","dba"));
+    }
+}
+
+//output : true
