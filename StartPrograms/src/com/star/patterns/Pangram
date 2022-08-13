@@ -1,0 +1,26 @@
+public class Pangram {
+
+    public static boolean isPangram(String input) {
+        int length = input.length();
+        int i = 0;
+        boolean[] bool = new boolean[26];
+        for (i = 0; i < length; i++) {
+            char ch = input.charAt(i);
+            if (Character.isAlphabetic(ch)) {
+                ch = Character.toUpperCase(ch);
+                int index = ch - 'A';
+                bool[index] = true;
+            }
+        }
+        for (boolean x: bool) {
+            if (x==false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isPangram("The quick brown fox jumps over a lazy dog"));
+    }
+}
