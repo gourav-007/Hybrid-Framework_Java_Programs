@@ -1,0 +1,24 @@
+public class CoinChangePermutation {
+//Coin Change Permutations
+    public static void findCoinChangePermutation(int[] coins,int tar){
+        int [] dp = new int[tar+1];
+        dp[0]=1;
+        for (int amt=1;amt<=tar;amt++){
+            for (int coin:coins){
+                if (coin<=amt){
+                    int remain_amt = amt-coin;
+                    dp[amt] += dp[remain_amt];
+                }
+            }
+        }
+        System.out.println(dp[tar]);
+    }
+
+    public static void main(String[] args) {
+        int [] coins = {2,3,5};
+        int tar = 7;
+        findCoinChangePermutation(coins,tar);
+    }
+}
+
+//output : 5
