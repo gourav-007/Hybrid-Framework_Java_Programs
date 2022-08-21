@@ -1,0 +1,24 @@
+public class maxSum {
+// find the maximum sum of a subsequence with no adjacent elements.
+    public static void maxSumofNonAdjacent(int[]arr){
+
+        int include = arr[0]; //5
+        int exclude = 0; //0
+
+        for (int i=1;i< arr.length;i++){
+            int newInclude = exclude + arr[i];
+            int newExclude = Math.max(include,exclude);
+
+            include = newInclude;
+            exclude = newExclude;
+        }
+        System.out.println(Math.max(include,exclude));
+    }
+
+    public static void main(String[] args) {
+        int [] arr = {5,10,10,100,5,6};
+        maxSumofNonAdjacent(arr);
+    }
+}
+
+//output : 116
