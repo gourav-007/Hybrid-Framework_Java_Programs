@@ -1,0 +1,34 @@
+import java.util.HashMap;
+
+class LargestSubArrayWithZeroSum {
+
+    public static int largestZeroSum(int [] arr){
+        HashMap<Integer,Integer> map = new HashMap<>();
+        int i=-1;
+        int sum=0;
+        int maxLength=0;
+        map.put(sum,i);
+        while (i<arr.length-1){
+            i++;
+            sum+=arr[i];
+
+            if (map.containsKey(sum)==false){
+                map.put(sum,i);
+            } else {
+                int length = i - map.get(sum);
+                if (length>maxLength){
+                    maxLength=length;
+                }
+            }
+        }
+
+        return maxLength;
+    }
+
+
+    public static void main(String[] args) {
+        int[]arr = {15, -2, 2, -8, 1, 7, 10, 23};
+        System.out.println(largestZeroSum(arr));
+    }
+
+}
